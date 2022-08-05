@@ -16,7 +16,4 @@ model ShortLink {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   url       String   @db.VarChar(1000)
-  hash      String   @db.VarChar(255) @unique
-
-  @@index(hash)
 }
