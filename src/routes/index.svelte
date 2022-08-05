@@ -6,7 +6,18 @@
 
 	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
+	let urlInput: HTMLInputElement;
+
 	$: urlValid = urlPattern.test(url);
+	$: {
+		if (urlInput) {
+			if (!!url && !urlValid) {
+				urlInput.setCustomValidity('Invalid URL');
+			} else {
+				urlInput.setCustomValidity('');
+			}
+		}
+	}
 	$: copyText = copied ? 'Copied to clipboard ✓' : 'Copy to clipboard.';
 
 	async function createShortLink() {
@@ -22,21 +33,21 @@
 		copied = false;
 	}
 
-	function copyShortlinkToClipboard() {
+	function copyToClipboard() {
 		copied = true;
 		navigator.clipboard.writeText(shortLinkUrl);
 	}
 </script>
 
 <div class="h-screen w-screen flex flex-col p-10 items-center">
-	<h1 class="text-5xl font-bold text-center uppercase brand mb-8">
-		Shorty
-	</h1>
+	<h1 class="text-5xl font-bold text-center uppercase brand mb-8">Shorty</h1>
 	<h4 class="text-2xl italic text-center mb-20 text-gray-700 dark:text-gray-50">
 		A fast and lightweight <span class="brand font-bold">link shortener</span>.
 	</h4>
 
-	<div class="border rounded p-6 sm:p-8 flex flex-col sm:flex-row gap-y-4 sm:gap-y-0 sm:gap-x-4 justify-between w-11/12 sm:w-3/4 lg:w-1/2 items-center sm:items-end">
+	<div
+		class="border rounded p-6 sm:p-8 flex flex-col sm:flex-row gap-y-4 sm:gap-y-0 sm:gap-x-4 justify-between w-11/12 sm:w-3/4 lg:w-1/2 items-center sm:items-end"
+	>
 		<div class="w-11/12 sm:w-1/3">
 			<label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
 				URL
@@ -44,11 +55,14 @@
 			<input
 				type="text"
 				id="url"
-				class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white w-full"
+				class="peer bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 invalid:border-red-600 text-gray-900 dark:text-gray-100 text-sm rounded-lg block p-2.5 dark:placeholder-gray-400 w-full focus:outline-none"
 				placeholder="https://www.google.com"
-				required
 				bind:value={url}
+				bind:this={urlInput}
 			/>
+			<p class="invisible peer-invalid:visible text-red-600 font-light absolute z-10">
+				Please enter a valid URL.
+			</p>
 		</div>
 
 		<button
@@ -98,7 +112,7 @@
 				<button
 					type="button"
 					class="tt-container text-white absolute right-0 bottom-0 font-medium rounded-lg text-sm px-2 h-full disabled:pointer-events-none"
-					on:click={copyShortlinkToClipboard}
+					on:click={copyToClipboard}
 					disabled={shortLinkUrl === ''}
 				>
 					<svg
@@ -110,8 +124,9 @@
 							d="M384 96L384 0h-112c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48H464c26.51 0 48-21.49 48-48V128h-95.1C398.4 128 384 113.6 384 96zM416 0v96h96L416 0zM192 352V128h-144c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h192c26.51 0 48-21.49 48-48L288 416h-32C220.7 416 192 387.3 192 352z"
 						/></svg
 					>
-					<span class="tt-text bg-gray-800 text-white absolute p-3 rounded-md -left-1/2 top-full w-32" class:text-green-400={copied}
-						>{copyText}</span
+					<span
+						class="tt-text bg-gray-800 text-white absolute p-3 rounded-md -left-1/2 top-full w-32"
+						class:text-green-400={copied}>{copyText}</span
 					>
 				</button>
 			</div>
@@ -135,5 +150,4 @@
 	.tt-container:hover .tt-text {
 		visibility: visible;
 	}
-
 </style>
