@@ -122,6 +122,7 @@
 <style>
 	.brand {
 		background: -webkit-linear-gradient(0deg, #a955f7, #ec4899);
+		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}

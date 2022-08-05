@@ -21,13 +21,15 @@ export async function GET({ params }) {
 		return {
 			status: 303,
 			headers: {
-				Location: shortLink?.url
+				Location: shortLink!.url
 			}
 		};
 	}
 
 	return {
 		status: 404,
-		body: 'No shortlink found'
+		body: {
+			errors: 'No shortlink was found with the given key.'
+		}
 	};
 }

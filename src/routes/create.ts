@@ -7,28 +7,42 @@ export async function POST({ request }) {
 
 	const hashIds = new HashIds(variables.hashIdsSalt);
 
-	var shortlink = await prisma?.shortLink.upsert({
-		where: {
-			url
-		},
-		update: {
-			url
-		},
-		create: {
+	var existingShortlink = await prisma.shortLink.findFirst({
+		where:{
+			url: {
+				equals: url
+			}
+		}
+	});
+
+	if(existingShortlink){
+		return {
+			status: 200,
+			body: {
+				id: hashIds.encode(newShortlink!.id)
+			}
+		};
+	}
+
+	var newShortlink = await prisma?.shortLink.create({
+		data: {
 			url
 		}
 	});
 
-	if (shortlink !== null) {
+	if (newShortlink) {
 		return {
 			status: 200,
 			body: {
-				id: hashIds.encode(shortlink!.id)
+				id: hashIds.encode(newShortlink!.id)
 			}
 		};
 	}
 
 	return {
-		status: 500
+		status: 500,
+		body: {
+			error: "Shortlink could not be created."
+		}
 	};
 }
