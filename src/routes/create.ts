@@ -19,7 +19,7 @@ export async function POST({ request }) {
 		return {
 			status: 200,
 			body: {
-				id: hashIds.encode(newShortlink!.id)
+				id: hashIds.encode(existingShortlink!.id)
 			}
 		};
 	}
