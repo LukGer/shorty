@@ -1,14 +1,20 @@
 import { prisma } from '../lib/database/client';
-import { variables } from "$lib/variables";
+import { variables } from '$lib/variables';
 import HashIds from 'hashids';
 
 export async function POST({ request }) {
-	var url = await request.text();
+	var url: string = await request.text();
 
 	const hashIds = new HashIds(variables.hashIdsSalt);
 
-	var shortlink = await prisma?.shortLink.create({
-		data: {
+	var shortlink = await prisma?.shortLink.upsert({
+		where: {
+			url
+		},
+		update: {
+			url
+		},
+		create: {
 			url
 		}
 	});

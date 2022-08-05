@@ -7,7 +7,7 @@
 	const urlPattern = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
 	$: urlValid = urlPattern.test(url);
-	$: copyText = copied ? "Copied to clipboard!" : "Copy to clipboard.";
+	$: copyText = copied ? 'Copied to clipboard ✓' : 'Copy to clipboard.';
 
 	async function createShortLink() {
 		isLoading = true;
@@ -19,6 +19,7 @@
 		shortLinkUrl = window.location.origin + '/' + body.id;
 
 		isLoading = false;
+		copied = false;
 	}
 
 	function copyShortlinkToClipboard() {
@@ -28,7 +29,7 @@
 </script>
 
 <div class="h-screen w-screen flex flex-col p-10 items-center">
-	<h1 class="text-5xl font-bold text-center uppercase dark:text-purple-500 text-fuchsia-600 mb-4">
+	<h1 class="text-5xl font-bold text-center uppercase brand mb-8">
 		Shorty
 	</h1>
 	<h4 class="text-2xl italic text-center mb-20 text-gray-700 dark:text-gray-50">
@@ -60,7 +61,7 @@
 				<div role="status">
 					<svg
 						aria-hidden="true"
-						class="w-6 h-6 text-gray-200 animate-spin dark:text-gray-600 fill-gray-100"
+						class="w-6 h-6 animate-spin text-gray-600 fill-gray-100"
 						viewBox="0 0 100 101"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -96,20 +97,22 @@
 				/>
 				<button
 					type="button"
-					class="tt-container text-white absolute right-0 bottom-0 font-medium rounded-lg text-sm px-2 h-full"
+					class="tt-container text-white absolute right-0 bottom-0 font-medium rounded-lg text-sm px-2 h-full disabled:pointer-events-none"
 					on:click={copyShortlinkToClipboard}
-					disabled={shortLinkUrl == ''}
+					disabled={shortLinkUrl === ''}
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 384 512"
-						class="w-7 h-5 text-white hover:text-gray-300 active:text-blue-300 disabled:text-gray-500"
+						class="w-7 h-5 text-gray-600 hover:text-gray-400 disabled:text-gray-300 dark:text-gray-200 dark:hover:text-gray-300  dark:disabled:text-gray-500 active:text-blue-300"
 						fill="currentColor"
 						><path
 							d="M384 96L384 0h-112c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48H464c26.51 0 48-21.49 48-48V128h-95.1C398.4 128 384 113.6 384 96zM416 0v96h96L416 0zM192 352V128h-144c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h192c26.51 0 48-21.49 48-48L288 416h-32C220.7 416 192 387.3 192 352z"
 						/></svg
 					>
-					<span class="tt-text bg-gray-800 text-white absolute p-3 rounded-md -left-1/2 top-full">{copyText}</span>
+					<span class="tt-text bg-gray-800 text-white absolute p-3 rounded-md -left-1/2 top-full w-32" class:text-green-400={copied}
+						>{copyText}</span
+					>
 				</button>
 			</div>
 		</div>
@@ -130,4 +133,5 @@
 	.tt-container:hover .tt-text {
 		visibility: visible;
 	}
+
 </style>
