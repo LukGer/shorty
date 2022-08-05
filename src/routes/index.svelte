@@ -36,8 +36,8 @@
 		A fast and lightweight <span class="brand font-bold">link shortener</span>.
 	</h4>
 
-	<div class="border rounded p-8 flex flex-row justify-between w-1/2 items-end">
-		<div class="w-1/3">
+	<div class="border rounded p-6 sm:p-8 flex flex-col sm:flex-row gap-y-4 sm:gap-y-0 sm:gap-x-4 justify-between w-11/12 sm:w-3/4 lg:w-1/2 items-center sm:items-end">
+		<div class="w-11/12 sm:w-1/3">
 			<label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
 				URL
 			</label>
@@ -82,7 +82,7 @@
 			{/if}
 		</button>
 
-		<div class="w-1/3">
+		<div class="w-11/12 sm:w-1/3">
 			<label for="url" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
 				Shortlink
 			</label>
@@ -125,6 +125,7 @@
 		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
+		white-space: nowrap;
 	}
 
 	.tt-container .tt-text {
